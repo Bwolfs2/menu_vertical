@@ -4,8 +4,7 @@ import 'package:menu_vertical/src/shared/widgets/menu_item/menu_item_widget.dart
 class VerticalMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 70,
+    return Container(      
       //color: Color(0xff33334c),
       child: Column(children: [
         MenuItemWidget(

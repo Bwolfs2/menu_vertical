@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -65,8 +67,10 @@ class _VerticalMenuWidgetState extends State<VerticalMenuWidget>
                                 action: () {},
                               ),
                         builder: (context, child) {
-                          return Transform.translate(
-                            offset: Offset(buttonAnimations[index].value, 0),
+                          return  Transform(
+                            transform: Matrix4.identity()
+                              ..setEntry(3, 2, 0.0005)
+                              ..rotateY(-pi * buttonAnimations[index].value),
                             child: child,
                           );
                         },

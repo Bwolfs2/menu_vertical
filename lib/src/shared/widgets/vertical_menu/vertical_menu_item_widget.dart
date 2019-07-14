@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class MenuItemWidget extends StatelessWidget {
+class VerticalMenuItemWidget extends StatelessWidget {
   final IconData icon;
   final bool selected;
-  final Function() action;
+  final void Function() action;
   final bool closeButtom;
 
-  const MenuItemWidget(
+  const VerticalMenuItemWidget(
       {Key key,
       @required this.icon,
       this.selected = false,
@@ -16,8 +16,9 @@ class MenuItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: AspectRatio(
+    return AspectRatio(
+      child: GestureDetector(
+        onTap: action,
         child: Container(          
           decoration: BoxDecoration(
             border: Border(
@@ -31,13 +32,13 @@ class MenuItemWidget extends StatelessWidget {
                 : Theme.of(context).primaryColor,
           ),
           child: Icon(
-            icon,
-            size: 50,
+            icon,   
+            size: MediaQuery.of(context).size.height / 16,             
             color: closeButtom ? Theme.of(context).accentColor : Colors.white,
           ),
         ),
-        aspectRatio: 1,
       ),
+      aspectRatio: 1,
     );
   }
 }

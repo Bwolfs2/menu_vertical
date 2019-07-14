@@ -1,46 +1,83 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:menu_vertical/src/shared/widgets/menu_item/menu_item_widget.dart';
 
-class VerticalMenuWidget extends StatelessWidget {
+import 'vertical_menu_animation.dart';
+import 'vertical_menu_controller.dart';
+import 'vertical_menu_item_widget.dart';
+import 'vertical_menu_model.dart';
+export 'vertical_menu_controller.dart';
+
+class VerticalMenuWidget extends StatefulWidget {
+  final Widget child;
+  final VerticalMenuController controller;
+  final List<VerticalMenuModel> pages;
+
+  const VerticalMenuWidget({
+    Key key,
+    this.child,
+    @required this.pages,
+    @required this.controller,
+  }) : super(key: key);
+
+  @override
+  _VerticalMenuWidgetState createState() => _VerticalMenuWidgetState();
+}
+
+class _VerticalMenuWidgetState extends State<VerticalMenuWidget>
+    with TickerProviderStateMixin, VerticalMenuAnimation {
+  @override
+  VerticalMenuController get controller => widget.controller;
+
+  @override
+  void initState() {
+    bloc.itemsController.add(widget.pages.length+1);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(      
-      //color: Color(0xff33334c),
-      child: Column(children: [
-        MenuItemWidget(
-          icon: Icons.close,
-          action: () {},
-          closeButtom: true,
+    return Stack(
+      children: <Widget>[
+        widget.child,
+        Offstage(
+          offstage: widget.controller.isOpen,
+          child: StreamBuilder<int>(
+            stream: bloc.itemsController,
+            builder: (context, snapshot) {
+              if ((buttonAnimations == null))
+                return Container();
+              else
+                return Column(
+                  children: List.generate(widget.pages.length, (index) {
+                    var current = widget.pages[index];
+
+                    return Expanded(
+                      child: AnimatedBuilder(
+                        animation: buttonAnimations[index],
+                        child: (index == 0)
+                            ? VerticalMenuItemWidget(
+                                icon: Icons.close,
+                                action: controller.close,
+                                closeButtom: true,
+                              )
+                            : VerticalMenuItemWidget(
+                                icon: current.icon,
+                                action: () {},
+                              ),
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(buttonAnimations[index].value, 0),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  }),
+                );
+            },
+          ),
         ),
-        MenuItemWidget(
-          icon: Icons.mic,
-          action: () {},
-        ),
-        MenuItemWidget(
-          icon: Icons.local_drink,
-          action: () {},
-        ),
-        MenuItemWidget(
-          icon: Icons.video_call,
-          action: () {},
-        ),
-        MenuItemWidget(
-          icon: Icons.change_history,
-          action: () {},
-        ),
-        MenuItemWidget(
-          icon: Icons.casino,
-          action: () {},
-        ),
-         MenuItemWidget(
-          icon: Icons.image_aspect_ratio,
-          action: () {},
-        ),
-         MenuItemWidget(
-          icon: Icons.book,
-          action: () {},
-        )
-      ]),
+      ],
     );
   }
 }

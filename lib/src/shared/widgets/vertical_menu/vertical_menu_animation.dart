@@ -16,7 +16,7 @@ mixin VerticalMenuAnimation<T extends StatefulWidget>
     super.didChangeDependencies();
     controller.animation = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 2000),
+      duration: Duration(milliseconds: 1000),
     );
 
     bloc.itemsController.listen((lenght) {
